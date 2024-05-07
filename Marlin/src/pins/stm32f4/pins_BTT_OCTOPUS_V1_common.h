@@ -205,11 +205,11 @@
 //   #define E1_CS_PIN                         PE4
 // #endif
 
-#define W_STEP_PIN                         PC13  // MOTOR 5
-#define W_DIR_PIN                          PF0
-#define W_ENABLE_PIN                       PF1
-#ifndef W_CS_PIN
-  #define W_CS_PIN                         PE4
+#define I_STEP_PIN                         PC13  // MOTOR 5
+#define I_DIR_PIN                          PF0
+#define I_ENABLE_PIN                       PF1
+#ifndef I_CS_PIN
+  #define I_CS_PIN                         PE4
 #endif
 
 #define E2_STEP_PIN                         PE2   // MOTOR 6
