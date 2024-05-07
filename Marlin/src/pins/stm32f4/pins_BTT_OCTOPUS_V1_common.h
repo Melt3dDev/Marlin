@@ -198,11 +198,18 @@
   #define E0_CS_PIN                         PF2
 #endif
 
-#define E1_STEP_PIN                         PC13  // MOTOR 5
-#define E1_DIR_PIN                          PF0
-#define E1_ENABLE_PIN                       PF1
-#ifndef E1_CS_PIN
-  #define E1_CS_PIN                         PE4
+// #define E1_STEP_PIN                         PC13  // MOTOR 5
+// #define E1_DIR_PIN                          PF0
+// #define E1_ENABLE_PIN                       PF1
+// #ifndef E1_CS_PIN
+//   #define E1_CS_PIN                         PE4
+// #endif
+
+#define W_STEP_PIN                         PC13  // MOTOR 5
+#define W_DIR_PIN                          PF0
+#define W_ENABLE_PIN                       PF1
+#ifndef W_CS_PIN
+  #define W_CS_PIN                         PE4
 #endif
 
 #define E2_STEP_PIN                         PE2   // MOTOR 6
