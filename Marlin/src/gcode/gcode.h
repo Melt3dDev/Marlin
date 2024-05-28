@@ -499,6 +499,8 @@ private:
   #endif
 
   static void G0_G1(TERN_(HAS_FAST_MOVES, const bool fast_move=false));
+  
+
 
   #if ENABLED(ARC_SUPPORT)
     static void G2_G3(const bool clockwise);
@@ -522,6 +524,8 @@ private:
   #if ENABLED(NOZZLE_CLEAN_FEATURE)
     static void G12();
   #endif
+  
+  static void G13();
 
   #if ENABLED(CNC_WORKSPACE_PLANES)
     static void G17();

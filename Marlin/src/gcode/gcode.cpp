@@ -367,6 +367,8 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
       #if ENABLED(NOZZLE_CLEAN_FEATURE)
         case 12: G12(); break;                                    // G12: Nozzle Clean
       #endif
+      
+      case 13: G13(); break;
 
       #if ENABLED(CNC_WORKSPACE_PLANES)
         case 17: G17(); break;                                    // G17: Select Plane XY

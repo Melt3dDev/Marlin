@@ -212,12 +212,11 @@
   #define I_CS_PIN                         PE4
 #endif
 
-#define E2_STEP_PIN                         PE2   // MOTOR 6
-#define E2_DIR_PIN                          PE3
-#define E2_ENABLE_PIN                       PD4
-#ifndef E2_CS_PIN
-
-  #define E2_CS_PIN                         PE1
+#define J_STEP_PIN                         PE2   // MOTOR 6
+#define J_DIR_PIN                          PE3
+#define J_ENABLE_PIN                       PD4
+#ifndef J_CS_PIN
+  #define J_CS_PIN                         PE1
 #endif
 
 #define E3_STEP_PIN                         PE6   // MOTOR 7
