@@ -526,6 +526,7 @@ private:
   #endif
   
   static void G13();
+  static void G14();
 
   #if ENABLED(CNC_WORKSPACE_PLANES)
     static void G17();

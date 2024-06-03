@@ -69,8 +69,8 @@
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
   #define MOTHERBOARD BOARD_BTT_OCTOPUS_V1_1
-  #define I_STOP_PIN PG14
-  #define J_STOP_PIN PG15
+  #define I_STOP_PIN PG13
+  #define J_STOP_PIN PG14
 #endif
 
 /**

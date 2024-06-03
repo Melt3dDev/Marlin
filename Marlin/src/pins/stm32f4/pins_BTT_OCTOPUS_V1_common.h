@@ -184,12 +184,12 @@
   #define Z_CS_PIN                          PC6
 #endif
 
-#define Z2_STEP_PIN                         PG4   // MOTOR 3
-#define Z2_DIR_PIN                          PC1
-#define Z2_ENABLE_PIN                       PA0
-#ifndef Z2_CS_PIN
-  #define Z2_CS_PIN                         PC7
-#endif
+// #define Z2_STEP_PIN                         PG4   // MOTOR 3
+// #define Z2_DIR_PIN                          PC1
+// #define Z2_ENABLE_PIN                       PA0
+// #ifndef Z2_CS_PIN
+//   #define Z2_CS_PIN                         PC7
+// #endif
 
 #define E0_STEP_PIN                         PF9   // MOTOR 4
 #define E0_DIR_PIN                          PF10
@@ -205,26 +205,26 @@
 //   #define E1_CS_PIN                         PE4
 // #endif
 
-#define I_STEP_PIN                         PC13  // MOTOR 5
-#define I_DIR_PIN                          PF0
-#define I_ENABLE_PIN                       PF1
-#ifndef I_CS_PIN
-  #define I_CS_PIN                         PE4
-#endif
-
-#define J_STEP_PIN                         PE2   // MOTOR 6
-#define J_DIR_PIN                          PE3
-#define J_ENABLE_PIN                       PD4
+#define J_STEP_PIN                         PC13  // MOTOR 5
+#define J_DIR_PIN                          PF0
+#define J_ENABLE_PIN                       PF1
 #ifndef J_CS_PIN
-  #define J_CS_PIN                         PE1
+  #define J_CS_PIN                         PE4
 #endif
 
-#define E3_STEP_PIN                         PE6   // MOTOR 7
-#define E3_DIR_PIN                          PA14
-#define E3_ENABLE_PIN                       PE0
-#ifndef E3_CS_PIN
-  #define E3_CS_PIN                         PD3
+#define I_STEP_PIN                         PE2   // MOTOR 6
+#define I_DIR_PIN                          PE3
+#define I_ENABLE_PIN                       PD4
+#ifndef I_CS_PIN
+  #define I_CS_PIN                         PE1
 #endif
+
+// #define E3_STEP_PIN                         PE6   // MOTOR 7
+// #define E3_DIR_PIN                          PA14
+// #define E3_ENABLE_PIN                       PE0
+// #ifndef E3_CS_PIN
+//   #define E3_CS_PIN                         PD3
+// #endif
 
 //
 // Temperature Sensors

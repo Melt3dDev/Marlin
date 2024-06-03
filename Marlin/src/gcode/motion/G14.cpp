@@ -28,13 +28,15 @@
 
 #include "../../module/planner.h"
 
-void GcodeSuite::G13() {
-    if (parser.seenval('S')) {
-        float distance = parser.value_float();
+void GcodeSuite::G14() {
+    if (parser.seenval('Z') && parser.seenval('W') && parser.seenval('V')) {
+        const float z_val = parser.floatval('Z'),
+                    w_val = parser.floatval('W'),
+                    v_val = parser.floatval('V');
         set_relative_mode(true);
-        current_position[I_AXIS] += distance;
-        current_position[J_AXIS] += distance;
-        current_position[Z_AXIS] += distance;
+        current_position[Z_AXIS] += z_val;
+        current_position[I_AXIS] += w_val;
+        current_position[J_AXIS] += v_val;
         planner.buffer_line(current_position, feedrate_mm_s, active_extruder);
         set_relative_mode(false);
     }
