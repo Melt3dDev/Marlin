@@ -29,7 +29,7 @@
 #include "../../module/planner.h"
 
 void GcodeSuite::G13() {
-    if (parser.seenval('S')) {
+    if (parser.seenval('R')) {
         float distance = parser.value_float();
         set_relative_mode(true);
         current_position[I_AXIS] += distance;
@@ -37,5 +37,12 @@ void GcodeSuite::G13() {
         current_position[Z_AXIS] += distance;
         planner.buffer_line(current_position, feedrate_mm_s, active_extruder);
         set_relative_mode(false);
+    }
+    if (parser.seenval('P')) {
+        float distance = parser.value_float();
+        current_position[I_AXIS] = distance;
+        current_position[J_AXIS] = distance;
+        current_position[Z_AXIS] = distance;
+        planner.buffer_line(current_position, feedrate_mm_s, active_extruder);
     }
 }

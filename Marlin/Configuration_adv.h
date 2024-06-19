@@ -2340,11 +2340,11 @@
  * For example, after homing a rotational axis the Z probe might not be perpendicular to the bed.
  * Choose values the orient the bed horizontally and the Z-probe vertically.
  */
-//#define SAFE_BED_LEVELING_START_X 0.0
-//#define SAFE_BED_LEVELING_START_Y 0.0
-//#define SAFE_BED_LEVELING_START_Z 0.0
-//#define SAFE_BED_LEVELING_START_I 0.0
-//#define SAFE_BED_LEVELING_START_J 0.0
+#define SAFE_BED_LEVELING_START_X 0.0
+#define SAFE_BED_LEVELING_START_Y 0.0
+#define SAFE_BED_LEVELING_START_Z 0.0
+#define SAFE_BED_LEVELING_START_I 0.0
+#define SAFE_BED_LEVELING_START_J 0.0
 //#define SAFE_BED_LEVELING_START_K 0.0
 //#define SAFE_BED_LEVELING_START_U 0.0
 //#define SAFE_BED_LEVELING_START_V 0.0
@@ -2355,9 +2355,9 @@
  * Override if the automatically selected points are inadequate.
  */
 #if NEEDS_THREE_PROBE_POINTS
-  //#define PROBE_PT_1 {  15, 180 }   // (mm) { x, y }
-  //#define PROBE_PT_2 {  15,  20 }
-  //#define PROBE_PT_3 { 170,  20 }
+  #define PROBE_PT_1 {  15, 180 }   // (mm) { x, y }
+  #define PROBE_PT_2 {  15,  20 }
+  #define PROBE_PT_3 { 170,  20 }
 #endif
 
 /**
