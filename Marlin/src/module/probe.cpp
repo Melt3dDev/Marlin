@@ -963,10 +963,18 @@ float Probe::probe_at_point(const_float_t rx, const_float_t ry, const ProbePtRai
   const float safe_z = _MAX(current_position.z, z_clearance);
 
   // On delta keep Z below clip height or do_blocking_move_to will abort
+  // xyz_pos_t npos = NUM_AXIS_ARRAY(
+  //   rx, ry, TERN(DELTA, _MIN(delta_clip_start_height, safe_z), safe_z),
+  //   current_position.i, current_position.j, current_position.k,
+  //   current_position.u, current_position.v, current_position.w
+  // );
+
+  // Toto potencialne moze byt taka picovina ale zaroven to moze byt riesenie
+
   xyz_pos_t npos = NUM_AXIS_ARRAY(
     rx, ry, TERN(DELTA, _MIN(delta_clip_start_height, safe_z), safe_z),
     current_position.i, current_position.j, current_position.k,
-    current_position.u, current_position.v, current_position.w
+    current_position.u, TERN(DELTA, _MIN(delta_clip_start_height, safe_z), safe_z), TERN(DELTA, _MIN(delta_clip_start_height, safe_z), safe_z)
   );
   if (!can_reach(npos, probe_relative)) {
     if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM("Not Reachable");
