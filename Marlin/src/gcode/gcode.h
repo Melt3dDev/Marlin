@@ -143,7 +143,7 @@
  *        R<temp> Wait for extruder current temp to reach target temp. ** Wait for heating or cooling. **
  *        If AUTOTEMP is enabled, S<mintemp> B<maxtemp> F<factor>. Exit autotemp by any M109 without F
  *
- * M110 - Set the current line number. (Used by host printing)
+ * M110 - Get or set the current line number. (Used by host printing)
  * M111 - Set debug flags: "M111 S<flagbits>". See flag bits defined in enum.h.
  * M112 - Full Shutdown.
  *
@@ -243,6 +243,7 @@
  * M425 - Enable/Disable and tune backlash correction. (Requires BACKLASH_COMPENSATION and BACKLASH_GCODE)
  * M428 - Set the home_offset based on the current_position. Nearest edge applies. (Disabled by NO_WORKSPACE_OFFSETS or DELTA)
  * M430 - Read the system current, voltage, and power (Requires POWER_MONITOR_CURRENT, POWER_MONITOR_VOLTAGE, or POWER_MONITOR_FIXED_VOLTAGE)
+ * M485 - Send RS485 packets (Requires RS485_SERIAL_PORT)
  * M486 - Identify and cancel objects. (Requires CANCEL_OBJECTS)
  * M500 - Store parameters in EEPROM. (Requires EEPROM_SETTINGS)
  * M501 - Restore parameters from EEPROM. (Requires EEPROM_SETTINGS)
@@ -499,8 +500,6 @@ private:
   #endif
 
   static void G0_G1(TERN_(HAS_FAST_MOVES, const bool fast_move=false));
-  
-
 
   #if ENABLED(ARC_SUPPORT)
     static void G2_G3(const bool clockwise);
@@ -524,10 +523,7 @@ private:
   #if ENABLED(NOZZLE_CLEAN_FEATURE)
     static void G12();
   #endif
-  
-  static void G13();
-  static void G14();
-
+    static void G13();
   #if ENABLED(CNC_WORKSPACE_PLANES)
     static void G17();
     static void G18();
@@ -610,7 +606,7 @@ private:
 
   #if SAVED_POSITIONS
     static void G60();
-    static void G61();
+    static void G61(int8_t slot=-1);
   #endif
 
   #if ENABLED(GCODE_MOTION_MODES)
@@ -1068,6 +1064,10 @@ private:
     static void M430();
   #endif
 
+  #if HAS_RS485_SERIAL
+    static void M485();
+  #endif
+
   #if ENABLED(CANCEL_OBJECTS)
     static void M486();
   #endif
@@ -1279,6 +1279,10 @@ private:
 
   #if DGUS_LCD_UI_MKS
     static void M1002();
+  #endif
+
+  #if ENABLED(ONE_CLICK_PRINT)
+    static void M1003();
   #endif
 
   #if ENABLED(UBL_MESH_WIZARD)

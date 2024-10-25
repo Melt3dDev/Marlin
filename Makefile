@@ -7,7 +7,9 @@ UNIT_TEST_CONFIG ?= default
 help:
 	@echo "Tasks for local development:"
 	@echo "make marlin                    : Build marlin for the configured board"
-	@echo "make format-pins               : Reformat all pins files"
+	@echo "make format-pins -j            : Reformat all pins files (-j for parallel execution)"
+	@echo "make validate-pins -j          : Validate all pins files, fails if any require reformatting"
+	@echo "make base-configs              : Regenerate the base configs in Marlin/src/inc"
 	@echo "make tests-single-ci           : Run a single test from inside the CI"
 	@echo "make tests-single-local        : Run a single test locally"
 	@echo "make tests-single-local-docker : Run a single test locally, using docker"
@@ -54,9 +56,18 @@ tests-single-local-docker:
 	$(CONTAINER_RT_BIN) run $(CONTAINER_RT_OPTS) $(CONTAINER_IMAGE) make tests-single-local TEST_TARGET=$(TEST_TARGET) VERBOSE_PLATFORMIO=$(VERBOSE_PLATFORMIO) GIT_RESET_HARD=$(GIT_RESET_HARD) ONLY_TEST="$(ONLY_TEST)"
 
 tests-all-local:
+	@python -c "import yaml" 2>/dev/null || (echo 'pyyaml module is not installed. Install it with "python -m pip install pyyaml"' && exit 1)
 	export PATH="./buildroot/bin/:./buildroot/tests/:${PATH}" \
 	  && export VERBOSE_PLATFORMIO=$(VERBOSE_PLATFORMIO) \
-	  && for TEST_TARGET in $$($(SCRIPTS_DIR)/get_test_targets.py) ; do echo "Running tests for $$TEST_TARGET" ; run_tests . $$TEST_TARGET ; done
+	  && for TEST_TARGET in $$(python $(SCRIPTS_DIR)/get_test_targets.py) ; do \
+	    if [ "$$TEST_TARGET" = "linux_native" ] && [ "$$(uname)" = "Darwin" ]; then \
+	      echo "Skipping tests for $$TEST_TARGET on macOS" ; \
+	      continue ; \
+	    fi ; \
+	    echo "Running tests for $$TEST_TARGET" ; \
+	    run_tests . $$TEST_TARGET || exit 1 ; \
+	    sleep 5; \
+	  done
 
 tests-all-local-docker:
 	@if ! $(CONTAINER_RT_BIN) images -q $(CONTAINER_IMAGE) > /dev/null ; then $(MAKE) setup-local-docker ; fi
@@ -81,7 +92,20 @@ setup-local-docker:
 
 PINS := $(shell find Marlin/src/pins -mindepth 2 -name '*.h')
 
+.PHONY: $(PINS) format-pins validate-pins
+
 $(PINS): %:
-	@echo "Formatting $@" && node $(SCRIPTS_DIR)/pinsformat.js $@
+	@echo "Formatting $@"
+	@python $(SCRIPTS_DIR)/pinsformat.py $< $@
 
 format-pins: $(PINS)
+
+validate-pins: format-pins
+	@echo "Validating pins files"
+	@git diff --exit-code || (git status && echo "\nError: Pins files are not formatted correctly. Run \"make format-pins\" to fix.\n" && exit 1)
+
+base-configs:
+	@echo "Generating base configs"
+	@python $(SCRIPTS_DIR)/makeBaseConfigs.py 2>/dev/null \
+	  && git add Marlin/src/inc/BaseConfiguration.h Marlin/src/inc/BaseConfiguration_adv.h \
+	  && git commit -m "[cron] Update Base Configurations"

@@ -19,30 +19,62 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
-#include "../../inc/MarlinConfig.h"
+#include "../../inc/MarlinConfigPre.h"
+
+#include "../../feature/z_stepper_align.h"
 
 #include "../gcode.h"
 #include "../../module/motion.h"
-
-#include "../../MarlinCore.h"
-
+#include "../../module/stepper.h"
 #include "../../module/planner.h"
+#include "../../module/probe.h"
+#include "../../lcd/marlinui.h" // for LCD_MESSAGE
+
+#if HAS_LEVELING
+  #include "../../feature/bedlevel/bedlevel.h"
+#endif
+
+#if HAS_Z_STEPPER_ALIGN_STEPPER_XY
+  #include "../../libs/least_squares_fit.h"
+#endif
+
+#if ENABLED(BLTOUCH)
+  #include "../../feature/bltouch.h"
+#endif
+
+#define DEBUG_OUT ENABLED(DEBUG_LEVELING_FEATURE)
+#include "../../core/debug_out.h"
+
+// #if NUM_Z_STEPPERS >= 3
+//   #define TRIPLE_Z 1
+//   #if NUM_Z_STEPPERS >= 4
+//     #define QUAD_Z 1
+//   #endif
+// #endif
 
 void GcodeSuite::G13() {
-    if (parser.seenval('R')) {
-        float distance = parser.value_float();
-        set_relative_mode(true);
-        current_position[I_AXIS] += distance;
-        current_position[J_AXIS] += distance;
-        current_position[Z_AXIS] += distance;
-        planner.buffer_line(current_position, feedrate_mm_s, active_extruder);
-        set_relative_mode(false);
-    }
-    if (parser.seenval('P')) {
-        float distance = parser.value_float();
-        current_position[I_AXIS] = distance;
-        current_position[J_AXIS] = distance;
-        current_position[Z_AXIS] = distance;
-        planner.buffer_line(current_position, feedrate_mm_s, active_extruder);
-    }
+  planner.synchronize();
+
+  stepper.set_separate_multi_axis(true);
+
+  stepper.set_z1_lock(true);
+  stepper.set_z2_lock(true);
+
+  SERIAL_ECHOLNPGM("test move only axis 3");
+  do_blocking_move_to_z(10 + current_position.z);
+  
+  planner.synchronize();
+
+  stepper.set_z1_lock(false);
+  stepper.set_z2_lock(false);
+
+  stepper.set_z3_lock(true);
+
+  SERIAL_ECHOLNPGM("test move only axis 1 and 2");  
+  do_blocking_move_to_z(-10 + current_position.z);
+
+  stepper.set_z3_lock(false);
+
+  stepper.set_separate_multi_axis(false);
+
 }
