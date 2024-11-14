@@ -247,8 +247,8 @@ void reset_stepper_drivers();    // Called by settings.load / settings.reset
   #endif
   #ifndef I_DIR_INIT
     #define I_DIR_INIT() SET_OUTPUT(I_DIR_PIN)
-    #define I_DIR_WRITE(STATE) WRITE(I_DIR_PIN,INVERT_DIR(I, STATE))
-    #define I_DIR_READ() INVERT_DIR(I, bool(READ(I_DIR_PIN)))
+    #define I_DIR_WRITE(STATE) WRITE(Z2_DIR_PIN,INVERT_DIR(Z2, STATE))
+    #define I_DIR_READ() INVERT_DIR(Z2, bool(READ(Z2_DIR_PIN)))
   #endif
   #define I_STEP_INIT() SET_OUTPUT(I_STEP_PIN)
   #ifndef I_STEP_WRITE
@@ -266,8 +266,8 @@ void reset_stepper_drivers();    // Called by settings.load / settings.reset
   #endif
   #ifndef J_DIR_INIT
     #define J_DIR_INIT() SET_OUTPUT(J_DIR_PIN)
-    #define J_DIR_WRITE(STATE) WRITE(J_DIR_PIN,INVERT_DIR(J, STATE))
-    #define J_DIR_READ() INVERT_DIR(J, bool(READ(J_DIR_PIN)))
+    #define J_DIR_WRITE(STATE) WRITE(Z3_DIR_PIN,INVERT_DIR(Z3, STATE))
+    #define J_DIR_READ() INVERT_DIR(Z3, bool(READ(Z3_DIR_PIN)))
   #endif
   #define J_STEP_INIT() SET_OUTPUT(J_STEP_PIN)
   #ifndef J_STEP_WRITE

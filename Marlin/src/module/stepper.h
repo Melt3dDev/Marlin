@@ -307,6 +307,7 @@ class Stepper {
 
     #if ANY(HAS_EXTRA_ENDSTOPS, Z_STEPPER_AUTO_ALIGN)
       static bool separate_multi_axis;
+      static bool samostatny_pohyb;
     #endif
 
     #if HAS_MOTOR_CURRENT_SPI || HAS_MOTOR_CURRENT_PWM
@@ -588,6 +589,7 @@ class Stepper {
 
     #if ANY(HAS_EXTRA_ENDSTOPS, Z_STEPPER_AUTO_ALIGN)
       FORCE_INLINE static void set_separate_multi_axis(const bool state) { separate_multi_axis = state; }
+      FORCE_INLINE static void set_samostatny_pohyb(const bool state) { samostatny_pohyb = state; }
     #endif
     #if ENABLED(X_DUAL_ENDSTOPS)
       FORCE_INLINE static void set_x_lock(const bool state) { locked_X_motor = state; }

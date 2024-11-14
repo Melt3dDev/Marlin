@@ -252,7 +252,7 @@ void reset_trinamic_drivers();
     #define I_ENABLE_READ() stepperI.isEnabled()
   #endif
   #if AXIS_HAS_DEDGE(I)
-    #define I_STEP_WRITE(STATE) do{ if (STATE) TOGGLE(I_STEP_PIN); }while(0)
+    #define I_STEP_WRITE(STATE) do{ if (STATE) TOGGLE(Z2_STEP_PIN); }while(0)
   #endif
 #endif
 
@@ -266,7 +266,7 @@ void reset_trinamic_drivers();
     #define J_ENABLE_READ() stepperJ.isEnabled()
   #endif
   #if AXIS_HAS_DEDGE(J)
-    #define J_STEP_WRITE(STATE) do{ if (STATE) TOGGLE(J_STEP_PIN); }while(0)
+    #define J_STEP_WRITE(STATE) do{ if (STATE) TOGGLE(Z3_STEP_PIN); }while(0)
   #endif
 #endif
 

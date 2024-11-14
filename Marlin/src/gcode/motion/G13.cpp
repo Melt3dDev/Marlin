@@ -28,7 +28,9 @@
 #include "../../module/stepper.h"
 #include "../../module/planner.h"
 #include "../../module/probe.h"
+#include "../../module/stepper/trinamic.h"
 #include "../../lcd/marlinui.h" // for LCD_MESSAGE
+#include "../../../src/core/macros.h"
 
 #if HAS_LEVELING
   #include "../../feature/bedlevel/bedlevel.h"
@@ -55,26 +57,63 @@
 void GcodeSuite::G13() {
   planner.synchronize();
 
-  stepper.set_separate_multi_axis(true);
+  // stepper.set_separate_multi_axis(true);
 
-  stepper.set_z1_lock(true);
-  stepper.set_z2_lock(true);
+  // stepper.set_z1_lock(true);
+  // stepper.set_z2_lock(true);
 
-  SERIAL_ECHOLNPGM("test move only axis 3");
-  do_blocking_move_to_z(10 + current_position.z);
+  // SERIAL_ECHOLNPGM("test move only axis 3");
+  // do_blocking_move_to_z(10 + current_position.z);
   
-  planner.synchronize();
+  // planner.synchronize();
 
-  stepper.set_z1_lock(false);
-  stepper.set_z2_lock(false);
+  // stepper.set_z1_lock(false);
+  // stepper.set_z2_lock(false);
 
-  stepper.set_z3_lock(true);
+  // stepper.set_z3_lock(true);
 
-  SERIAL_ECHOLNPGM("test move only axis 1 and 2");  
-  do_blocking_move_to_z(-10 + current_position.z);
+  // SERIAL_ECHOLNPGM("test move only axis 1 and 2");  
+  // do_blocking_move_to_z(-10 + current_position.z);
 
-  stepper.set_z3_lock(false);
+  // stepper.set_z3_lock(false);
 
-  stepper.set_separate_multi_axis(false);
+  // stepper.set_separate_multi_axis(false); 
 
+  // WRITE(Z_STEP_PIN,10);
+
+  // stepper.set_samostatny_pohyb(true);
+  // do_blocking_move_to_z(1 + current_position.z);
+  // SERIAL_ECHOLNPGM("tri"); 
+  // stepper.set_samostatny_pohyb(false);
+  
+  // planner.synchronize();
+
+  // current_position[Z_AXIS] -= 10;
+  // planner.buffer_line(current_position, feedrate_mm_s, active_extruder);
+  // SERIAL_ECHOLNPGM("st");
+
+  if (parser.seenval('R') && parser.seenval('Z') && parser.seenval('V') && parser.seenval('W')) {
+    const float z_val = parser.floatval('Z'),
+                v_val = parser.floatval('V'),
+                w_val = parser.floatval('W');
+    set_relative_mode(true);
+    stepper.set_samostatny_pohyb(true);
+    current_position[Z_AXIS] += z_val;
+    current_position[I_AXIS] += v_val;
+    current_position[J_AXIS] += w_val;
+    planner.buffer_line(current_position, feedrate_mm_s, active_extruder);
+    stepper.set_samostatny_pohyb(false);
+    set_relative_mode(false);
+  }
+  else if (parser.seenval('S') && parser.seenval('Z') && parser.seenval('V') && parser.seenval('W')) {
+    const float z_val = parser.floatval('Z'),
+                w_val = parser.floatval('V'),
+                v_val = parser.floatval('W');
+    current_position[Z_AXIS] = z_val;
+    current_position[I_AXIS] = v_val;
+    current_position[J_AXIS] = w_val;
+    stepper.set_samostatny_pohyb(true);
+    planner.buffer_line(current_position, feedrate_mm_s, active_extruder);
+    stepper.set_samostatny_pohyb(false);
+  }
 }

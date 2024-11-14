@@ -156,6 +156,7 @@ Stepper stepper; // Singleton
 
 #if ANY(HAS_EXTRA_ENDSTOPS, Z_STEPPER_AUTO_ALIGN)
   bool Stepper::separate_multi_axis = false;
+  bool Stepper::samostatny_pohyb = false;
 #endif
 
 #if HAS_MOTOR_CURRENT_SPI || HAS_MOTOR_CURRENT_PWM
@@ -361,23 +362,25 @@ xyze_int8_t Stepper::count_direction{0};
   }
 
 // TODO: toto mozno tiez bude dolezite
+// To skurvene A je nazov osi
+// To jebnute V by malo byt FWD co by mal byt state co by mal byt zakladny smer
+// ked sa posunie o 1 tak sa _STEP_WRITE triggerne 800 krat
+// to je 2 krat DEFAULT_AXIS_STEPS_PER_UNIT co je 400
 #define TRIPLE_SEPARATE_APPLY_STEP(A,V)           \
   if (separate_multi_axis) {                      \
     if (!locked_##A## _motor) A## _STEP_WRITE(V); \
     if (!locked_##A##2_motor) A##2_STEP_WRITE(V); \
     if (!locked_##A##3_motor) A##3_STEP_WRITE(V); \
   }                                               \
+  else if (samostatny_pohyb) {                    \
+    A## _STEP_WRITE(V);                           \
+    SERIAL_ECHOLNPGM("Z write");                  \
+  }                                               \
   else {                                          \
     A## _STEP_WRITE(V);                           \
     A##2_STEP_WRITE(V);                           \
     A##3_STEP_WRITE(V);                           \
   }
-
-
-// TODO: premenovat
-#define KOKOT_SEPARATE_APPLY_STEP(A,V)            \
-    A## _STEP_WRITE(V);                           \
-    A##2_STEP_WRITE(V);                           \
 
 #define QUAD_ENDSTOP_APPLY_STEP(A,V)             \
   if (separate_multi_axis) {                     \
