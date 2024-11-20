@@ -373,7 +373,7 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
         case 12: G12(); break;                                    // G12: Nozzle Clean
       #endif
         case 13: G13(); break; 
-
+        case 14: G14(); break; 
       #if ENABLED(CNC_WORKSPACE_PLANES)
         case 17: G17(); break;                                    // G17: Select Plane XY
         case 18: G18(); break;                                    // G18: Select Plane ZX

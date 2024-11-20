@@ -2706,8 +2706,11 @@ void prepare_line_to_destination() {
       const xyz_float_t backoff = SENSORLESS_BACKOFF_MM;
       if ((TERN0(X_SENSORLESS, axis == X_AXIS) || TERN0(Y_SENSORLESS, axis == Y_AXIS) || TERN0(Z_SENSORLESS, axis == Z_AXIS) || TERN0(I_SENSORLESS, axis == I_AXIS) || TERN0(J_SENSORLESS, axis == J_AXIS) || TERN0(K_SENSORLESS, axis == K_AXIS)) && backoff[axis]) {
         const float backoff_length = -ABS(backoff[axis]) * axis_home_dir;
-        if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM("Sensorless backoff: ", backoff_length, "mm");
-        do_homing_move(axis, backoff_length, homing_feedrate(axis));
+        /*if (DEBUGGING(LEVELING))*/ SERIAL_ECHOLNPGM("Sensorless backoff: ", backoff_length, "mm");
+        if(axis != I_AXIS && axis != J_AXIS){
+          do_homing_move(axis, backoff_length, homing_feedrate(axis));
+          SERIAL_ECHOLNPGM("r");      
+        }
       }
     #endif
 
@@ -2733,8 +2736,12 @@ void prepare_line_to_destination() {
     // Fast move towards endstop until triggered
     //
     const float move_length = 1.5f * max_length(TERN(DELTA, Z_AXIS, axis)) * axis_home_dir;
-    if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM("Home Fast: ", move_length, "mm");
-    do_homing_move(axis, move_length, 0.0, !use_probe_bump);
+    /*if (DEBUGGING(LEVELING))*/ SERIAL_ECHOLNPGM("Home Fast: ", move_length, "mm");
+    if(axis != I_AXIS && axis != J_AXIS){
+      do_homing_move(axis, move_length, 0.0, !use_probe_bump);
+    SERIAL_ECHOLNPGM("e");      
+    }
+
 
     // If a second homing move is configured...
     if (bump) {
@@ -2743,8 +2750,12 @@ void prepare_line_to_destination() {
       #endif
 
       // Move away from the endstop by the axis HOMING_BUMP_MM
-      if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM("Move Away: ", -bump, "mm");
-      do_homing_move(axis, -bump, TERN0(HOMING_Z_WITH_PROBE, (axis == Z_AXIS ? z_probe_fast_mm_s : 0)), false);
+      /*if (DEBUGGING(LEVELING))*/ SERIAL_ECHOLNPGM("Move Away: ", -bump, "mm");
+      if(axis != I_AXIS && axis != J_AXIS){
+        do_homing_move(axis, -bump, TERN0(HOMING_Z_WITH_PROBE, (axis == Z_AXIS ? z_probe_fast_mm_s : 0)), false);
+        SERIAL_ECHOLNPGM("t");      
+      }
+
 
       #if ENABLED(DETECT_BROKEN_ENDSTOP)
 
@@ -2777,8 +2788,12 @@ void prepare_line_to_destination() {
 
       // Slow move towards endstop until triggered
       const float rebump = bump * 2;
-      if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM("Re-bump: ", rebump, "mm");
-      do_homing_move(axis, rebump, get_homing_bump_feedrate(axis), true);
+      /*if (DEBUGGING(LEVELING))*/ SERIAL_ECHOLNPGM("Re-bump: ", rebump, "mm");
+      if(axis != I_AXIS && axis != J_AXIS){
+
+        do_homing_move(axis, rebump, get_homing_bump_feedrate(axis), true);
+        SERIAL_ECHOLNPGM("d");
+      }
     }
 
     #if ALL(HOMING_Z_WITH_PROBE, BLTOUCH)

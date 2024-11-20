@@ -159,7 +159,7 @@
 //#define Z4_DRIVER_TYPE A4988
 #define I_DRIVER_TYPE  TMC2209
 #define J_DRIVER_TYPE  TMC2209
-//#define K_DRIVER_TYPE  A4988
+// #define K_DRIVER_TYPE  TMC2209
 //#define U_DRIVER_TYPE  A4988
 //#define V_DRIVER_TYPE  A4988
 //#define W_DRIVER_TYPE  A4988
@@ -1772,11 +1772,11 @@
 #define INVERT_Y_DIR false
 #define INVERT_Z_DIR true
 // FIXME: FUNGOVALO TO TREBA DALEJ TESTOVAT INVERTOVANIE OSI, nejde to dynamicky invertovat (asi)
-#define INVERT_Z2_DIR true
-#define INVERT_Z3_DIR true
+// #define INVERT_Z2_DIR false
+// #define INVERT_Z3_DIR false
 #define INVERT_I_DIR true
 #define INVERT_J_DIR true
-//#define INVERT_K_DIR false
+#define INVERT_K_DIR false
 //#define INVERT_U_DIR false
 //#define INVERT_V_DIR false
 //#define INVERT_W_DIR false
@@ -2295,7 +2295,7 @@
  * - Allows Z homing only when XY positions are known and trusted.
  * - If stepper drivers sleep, XY homing may be required again before Z homing.
  */
-#define Z_SAFE_HOMING
+// #define Z_SAFE_HOMING
 
 #if ENABLED(Z_SAFE_HOMING)
   #define Z_SAFE_HOMING_X_POINT X_CENTER  // (mm) X point for Z homing

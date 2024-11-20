@@ -374,7 +374,6 @@ xyze_int8_t Stepper::count_direction{0};
   }                                               \
   else if (samostatny_pohyb) {                    \
     A## _STEP_WRITE(V);                           \
-    SERIAL_ECHOLNPGM("Z write");                  \
   }                                               \
   else {                                          \
     A## _STEP_WRITE(V);                           \
@@ -487,14 +486,15 @@ xyze_int8_t Stepper::count_direction{0};
   #define Z_APPLY_DIR(FWD,Q) Z_DIR_WRITE(FWD)
   #define Z_APPLY_STEP(FWD,Q) Z_STEP_WRITE(FWD)
 #endif
-
+//zmenene I_DIR_WRITE na Z2_DIR_WRITE a I_STEP_WRITE na Z2_STEP_WRITE
 #if HAS_I_AXIS
-  #define I_APPLY_DIR(FWD,Q) I_DIR_WRITE(FWD)
-  #define I_APPLY_STEP(FWD,Q) I_STEP_WRITE(FWD)
+  #define I_APPLY_DIR(FWD,Q) Z2_DIR_WRITE(FWD);
+  #define I_APPLY_STEP(FWD,Q) Z2_STEP_WRITE(FWD)
 #endif
+//zmenene J_DIR_WRITE na Z3_DIR_WRITE a I_STEP_WRITE na Z2_STEP_WRITE
 #if HAS_J_AXIS
-  #define J_APPLY_DIR(FWD,Q) J_DIR_WRITE(FWD)
-  #define J_APPLY_STEP(FWD,Q) J_STEP_WRITE(FWD)
+  #define J_APPLY_DIR(FWD,Q) Z3_DIR_WRITE(FWD);
+  #define J_APPLY_STEP(FWD,Q) Z3_STEP_WRITE(FWD)
 #endif
 #if HAS_K_AXIS
   #define K_APPLY_DIR(FWD,Q) K_DIR_WRITE(FWD)
@@ -681,13 +681,22 @@ void Stepper::disable_all_steppers() {
  */
 void Stepper::apply_directions() {
   DIR_WAIT_BEFORE();
-
-  LOGICAL_AXIS_CODE(
-    SET_STEP_DIR(E),
-    SET_STEP_DIR(X), SET_STEP_DIR(Y), SET_STEP_DIR(Z), // ABC
-    SET_STEP_DIR(I), SET_STEP_DIR(J), SET_STEP_DIR(K),
-    SET_STEP_DIR(U), SET_STEP_DIR(V), SET_STEP_DIR(W)
-  );
+  if(samostatny_pohyb){
+    LOGICAL_AXIS_CODE(
+      SET_STEP_DIR(E),
+      SET_STEP_DIR(X), SET_STEP_DIR(Y), SET_STEP_DIR(Z), // ABC
+      SET_STEP_DIR(I), SET_STEP_DIR(J), SET_STEP_DIR(K),
+      SET_STEP_DIR(U), SET_STEP_DIR(V), SET_STEP_DIR(W)
+    );
+  }
+  else {
+    LOGICAL_AXIS_CODE(
+      SET_STEP_DIR(E),
+      SET_STEP_DIR(X), SET_STEP_DIR(Y), SET_STEP_DIR(Z), // ABC
+      SET_STEP_DIR(X), SET_STEP_DIR(X), SET_STEP_DIR(K),
+      SET_STEP_DIR(U), SET_STEP_DIR(V), SET_STEP_DIR(W)
+    );    
+  }
 
   TERN_(FTM_OPTIMIZE_DIR_STATES, last_set_direction = last_direction_bits);
 
