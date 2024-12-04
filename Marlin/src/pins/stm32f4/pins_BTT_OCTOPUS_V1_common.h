@@ -118,8 +118,12 @@
 #else
   #define Z_STOP_PIN                  Z_DIAG_PIN  // Z-STOP
 #endif
+
+#define I_STOP_PIN E3_DIAG_PIN
+#define J_STOP_PIN E3_DIAG_PIN
+
 #ifdef I_STALL_SENSITIVITY
-  #define I_STOP_PIN                  Z_DIAG_PIN
+  #define I_STOP_PIN                  E3_DIAG_PIN
   #if I_HOME_TO_MIN
     #define I_MAX_PIN                E2_DIAG_PIN  // E0DET
   #else
@@ -127,7 +131,7 @@
   #endif
 #endif
 #ifdef J_STALL_SENSITIVITY
-  #define J_STOP_PIN                  Z_DIAG_PIN
+  #define J_STOP_PIN                  E3_DIAG_PIN
   #if J_HOME_TO_MIN
     #define J_MAX_PIN                E2_DIAG_PIN  // E0DET
   #else

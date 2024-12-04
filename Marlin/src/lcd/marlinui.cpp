@@ -24,6 +24,9 @@
 
 #include "../MarlinCore.h" // for printingIsPaused
 #include "../gcode/parser.h" // for axis_is_rotational, using_inch_units
+#include "../module/stepper.h"
+#include "../module/planner.h"
+
 
 #if HAS_LED_POWEROFF_TIMEOUT || ALL(HAS_WIRED_LCD, PRINTER_EVENT_LEDS) || (HAS_BACKLIGHT_TIMEOUT && defined(NEOPIXEL_BKGD_INDEX_FIRST))
   #include "../feature/leds/leds.h"
@@ -857,9 +860,20 @@ void MarlinUI::init() {
       #else
 
         // For Cartesian / Core motion simply move to the current_position
-        planner.buffer_line(current_position, fr,
-          TERN_(MULTI_E_MANUAL, axis == E_AXIS ? e_index :) active_extruder
-        );
+        if(axis == I_AXIS || axis == J_AXIS) {
+          stepper.set_samostatny_pohyb(true);          
+          planner.buffer_line(current_position, fr,
+            TERN_(MULTI_E_MANUAL, axis == E_AXIS ? e_index :) active_extruder
+          );
+          planner.synchronize();
+          stepper.set_samostatny_pohyb(false);
+        }
+        else {
+          planner.buffer_line(current_position, fr,
+            TERN_(MULTI_E_MANUAL, axis == E_AXIS ? e_index :) active_extruder
+          );
+        }
+
 
         //SERIAL_ECHOLNPGM("Add planner.move with Axis ", C(AXIS_CHAR(axis)), " at FR ", fr_mm_s);
 
